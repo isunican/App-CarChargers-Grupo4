@@ -1,0 +1,27 @@
+@startuml dominio
+
+class Charger {
+    + String id
+    + int numberOfPoints
+    + String usageCost
+}
+
+class Operator {
+    + int id
+    + String title
+    + String website
+    + String comments
+}
+
+class Address {
+    + String title
+    + String town
+    + String province
+    + String latitude
+    + String longitude
+}
+
+Charger -down-> "1" Address : address
+Charger -down-> "1" Operator : operator
+
+@enduml

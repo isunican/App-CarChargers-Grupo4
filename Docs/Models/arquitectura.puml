@@ -1,0 +1,44 @@
+@startuml arquitectura
+
+skinparam linetype polyline
+skinparam arrowLollipopColor #ADD1B2
+
+MainView -right(0- MainPresenter : IMainContract.Presenter
+MainView -right0)- MainPresenter : IMainContract.View
+MainView -up..-> InfoActivity : <<use>>
+MainView -down..> DetailsView : <<use>>
+MainPresenter -right(0- Repository : IRepository
+
+together {
+  interface IMainContract#View
+  interface IMainContract#Presenter
+  interface IRepository
+  interface ICallBack
+}
+
+interface IMainContract#View {
+    init()
+    IRepository getRepository()
+    showChargers(List<Charger> chargers)
+    showLoadCorrect(int chargers)
+    showLoadError()
+    showChargerDetails(Charger charger)
+    showInfoActivity()
+}
+
+interface IMainContract#Presenter {
+   init(View view);
+   onChargerClicked(int index)
+   onMenuInfoClicked();
+}
+
+interface IRepository {
+    requestChargers(APIArguments args, ICallBack cb)
+}
+
+interface ICallBack {
+    onSuccess(List<Charger> chargers)
+    onFailure(Throwable e)
+}
+
+@enduml
