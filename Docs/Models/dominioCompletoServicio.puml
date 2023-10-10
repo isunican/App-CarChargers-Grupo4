@@ -1,0 +1,186 @@
+@startuml dominioCompletoServicio
+
+class Charger {
+    ID
+    DateCreated
+    IsRecentlyVerified
+    DateLastVerified
+    UsageCost
+    NumberOfPoints
+    GeneralComments
+    DatePlanned
+    DateLastConfirmed
+    DateLastStatusUpdate
+    MetadataValues
+    DataQualityLevel
+    DateCreated
+}
+Charger --> "1" AddressInfo : address
+Charger --> "*" UserComment : userComments
+Charger --> "*" MediaItem : mediaItems
+Charger --> "*" Connection : connections
+Charger --> "1" OperatorInfo : operator
+Charger --> "1" UsageType : usageType
+Charger --> "1" DataProvider : dataProvider
+Charger --> "1" SubmissionStatus : submissionStatus
+Charger --> "1" StatusType : status
+
+note top of Charger : more API details at [[https://openchargemap.org/site/develop/api#/schemas/POI]]
+
+class AddressInfo {
+    ID
+    Title
+    AddressLine1
+    AddressLine2
+    Town
+    StateOrProvince
+    PostCode
+    Latitude
+    Longitude
+    ContactTelephone1
+    ContactTelephone2
+    ContactEmail
+    AccessComments
+    RelatedUrl
+    Distance
+    DistanceUnit
+}
+AddressInfo --> "1" Country : country
+
+class Country {
+    ID
+    Title
+    ISOCode
+    ContinentCode
+}
+
+class User {
+    ID
+    Username
+    ReputationPoints
+    ProfileImageUrl
+}
+
+class UserComment {
+    ID
+    ChargePointID
+    CommentTypeID
+    UserName
+    Comment
+    RelatedURL
+    DateCreated
+    CheckinStatusTypeID
+}
+UserComment --> "1" User : user
+UserComment --> "1" CommentType : commentType
+UserComment --> "1" CheckinStatusType : checkInStatusType
+
+class CommentType {
+    ID
+    Title
+}
+
+class CheckinStatusType {
+    ID
+    Title
+    IsAutomatedCheckin
+    IsPositive
+}
+
+class MediaItem {
+    ID
+    DhargePointId
+    DateCreated
+    Comment
+    ItemUrl
+    ItemThumbnailUrl
+    IsEnabled
+    IsVideo
+    IsFeaturedItem
+    IsExternalResource
+}
+MediaItem --> "1" User : user
+
+class Connection {
+    ID
+    Reference
+    Amps
+    Voltage
+    PowerKw
+    Quantity
+    Comments
+}
+Connection --> "1" ConnectionType : connectionType
+Connection --> "1" StatusType : connectionStatus
+Connection --> "1" CurrentType : currentType
+Connection --> "1" Level : level
+
+class Level {
+    ID
+    Title
+    Comments
+    IsFastChargeCapable
+}
+
+
+class ConnectionType {
+    ID
+    Title
+    FormalName
+    IsDiscontinued
+    IsObsolete
+}
+
+class CurrentType {
+    ID
+    Title
+}
+
+class OperatorInfo {
+    ID
+    Title
+    WebsiteUrl
+    Comments
+    PhonePrimaryContact
+    PhoneSecondaryContact
+    ContactEmail
+    FaultReportEmail
+    IsPrivateIndividual
+    IsRestrictedEdit
+    BookingUrl
+}
+OperatorInfo --> "1" AddressInfo : address
+
+class UsageType {
+    ID
+    Title
+    IsPayAtLocation
+    IsMembershipRequired
+    IsAccessKeyRequired
+}
+
+class DataProvider {
+    ID
+    Title
+    WebsiteUrl
+    Comments
+    IsOpenDataLicensed
+    IsApprovedImport
+    License
+    DateLastImported
+}
+
+class StatusType {
+    ID
+    Title
+    IsOperational
+    IsUserSelectable
+}
+
+class SubmissionStatus {
+    ID
+    Title
+    IsLive
+}
+
+@enduml

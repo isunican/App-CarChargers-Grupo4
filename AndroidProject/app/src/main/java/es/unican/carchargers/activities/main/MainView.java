@@ -2,7 +2,6 @@ package es.unican.carchargers.activities.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,9 +13,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.chip.Chip;
+
 import org.parceler.Parcels;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -24,6 +26,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 import es.unican.carchargers.R;
 import es.unican.carchargers.activities.details.DetailsView;
 import es.unican.carchargers.activities.info.InfoActivity;
+import es.unican.carchargers.constants.EOperator;
+import es.unican.carchargers.constants.ESorting;
 import es.unican.carchargers.model.Charger;
 import es.unican.carchargers.repository.IRepository;
 
@@ -74,6 +78,33 @@ public class MainView extends AppCompatActivity implements IMainContract.View {
                 presenter.onChargerClicked(position);
             }
         });
+
+        findViewById(R.id.chipTesla).setTag(EOperator.TESLA);
+        findViewById(R.id.chipIberdrola).setTag(EOperator.IBERDROLA);
+        findViewById(R.id.chipIonity).setTag(EOperator.IONITY);
+        findViewById(R.id.chipZunder).setTag(EOperator.ZUNDER);
+
+        findViewById(R.id.chipDistancia).setTag(ESorting.DISTANCE);
+        findViewById(R.id.chipPotencia).setTag(ESorting.POWER);
+        findViewById(R.id.chipPrecio).setTag(ESorting.COST);
+
+        Stream.of(R.id.chipTesla, R.id.chipIberdrola, R.id.chipIonity, R.id.chipZunder)
+                .forEach(i -> {
+                    findViewById(i).setOnClickListener(chip -> onFilterClicked((Chip) chip));
+                });
+
+        Stream.of(R.id.chipDistancia, R.id.chipPotencia, R.id.chipPrecio)
+                .forEach(i -> {
+                    findViewById(i).setOnClickListener(chip -> onSortingClicked((Chip) chip));
+                });
+    }
+
+    private void onFilterClicked(Chip chip) {
+        presenter.onOperatorFilterClicked((EOperator)chip.getTag(), chip.isChecked());
+    }
+
+    private void onSortingClicked(Chip chip) {
+        presenter.onSortingClicked((ESorting)chip.getTag());
     }
 
     @Override

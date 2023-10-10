@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 public class APIArguments {
     private String countryCode;
     private List<Integer> operatorIds = new ArrayList<>();
+    private List<Integer> levelIds = new ArrayList<>();
+    private List<Integer> statusIds = new ArrayList<>();
     private Double lat;
     private Double lon;
     private Integer maxResults;
@@ -29,6 +31,8 @@ public class APIArguments {
         args.put(IOpenChargeMapAPI.LATITUDE, lat);
         args.put(IOpenChargeMapAPI.LONGITUDE, lon);
         args.put(IOpenChargeMapAPI.MAX_RESULTS, maxResults);
+        args.put(IOpenChargeMapAPI.LEVEL_ID, levelIds);
+        args.put(IOpenChargeMapAPI.STATUS_ID, statusIds);
         return args;
     }
 
@@ -40,6 +44,20 @@ public class APIArguments {
     public APIArguments setOperatorId(int ...operatorId) {
         for (int i : operatorId) {
             this.operatorIds.add(i);
+        }
+        return this;
+    }
+
+    public APIArguments setLevelId(int ...levelId) {
+        for (int i : levelId) {
+            this.levelIds.add(i);
+        }
+        return this;
+    }
+
+    public APIArguments setStatusId(int ...statusId) {
+        for (int i : statusId) {
+            this.statusIds.add(i);
         }
         return this;
     }

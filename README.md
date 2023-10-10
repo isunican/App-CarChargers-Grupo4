@@ -17,4 +17,4 @@ La información relativa al Proyecto Integrado, y las asignaturas que lo compone
 La aplicación inicial incluye funcionalidad básica para descargar y mostrar información sobre cargadores de coches eléctricos, utilizando el servicio [OpenChargeMap](https://openchargemap.org/site/develop/api#/)
 
 La aplicación utiliza el patrón Model-View-Presenter. El diagrama de arquitectura inicial es el siguiente:
-![](Docs/Models/Arquitectura.png)
+![](Docs/Models/arquitectura.png)

@@ -3,11 +3,11 @@ package es.unican.carchargers.activities.main;
 import java.util.Collections;
 import java.util.List;
 
-import es.unican.carchargers.repository.ICallBack;
 import es.unican.carchargers.constants.ECountry;
-import es.unican.carchargers.constants.ELocation;
 import es.unican.carchargers.constants.EOperator;
+import es.unican.carchargers.constants.ESorting;
 import es.unican.carchargers.model.Charger;
+import es.unican.carchargers.repository.ICallBack;
 import es.unican.carchargers.repository.IRepository;
 import es.unican.carchargers.repository.service.APIArguments;
 
@@ -36,16 +36,14 @@ public class MainPresenter implements IMainContract.Presenter {
         // set API arguments to retrieve charging stations that match some criteria
         APIArguments args = APIArguments.builder()
                 .setCountryCode(ECountry.SPAIN.code)
-                .setLocation(ELocation.SANTANDER.lat, ELocation.SANTANDER.lon)
-                .setMaxResults(50);
+                .setLevelId(3)          // level 3 (over 40kw)
+                .setStatusId(50)        // status 50 (Operational)
+                .setMaxResults(1000);   // limit download to 1000 results
 
         ICallBack callback = new ICallBack() {
             @Override
             public void onSuccess(List<Charger> chargers) {
-                MainPresenter.this.shownChargers =
-                        chargers != null ? chargers : Collections.emptyList();
-                view.showChargers(MainPresenter.this.shownChargers);
-                view.showLoadCorrect(MainPresenter.this.shownChargers.size());
+                updateChargers(chargers);
             }
 
             @Override
@@ -55,8 +53,32 @@ public class MainPresenter implements IMainContract.Presenter {
             }
         };
 
+        // asynchronously request chargers
         repository.requestChargers(args, callback);
+    }
 
+    /**
+     * Process the given list of chargers:
+     * <ul>
+     *     <li>Updates the cached list of chargers stored in this presenter</li>
+     *     <li>Sends the processed list of chargers to the View</li>
+     * </ul>
+     * @param chargers
+     */
+    private void updateChargers(List<Charger> chargers) {
+        this.shownChargers = chargers != null ? chargers : Collections.emptyList();
+        view.showChargers(this.shownChargers);
+        view.showLoadCorrect(this.shownChargers.size());
+    }
+
+    @Override
+    public void onOperatorFilterClicked(EOperator operator, boolean active) {
+        // TODO
+    }
+
+    @Override
+    public void onSortingClicked(ESorting criteria) {
+        // TODO
     }
 
     @Override

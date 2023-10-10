@@ -47,4 +47,20 @@ public class Repositories {
         return new Repository(APIFactory.fakeFailure());
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     */
+    public static IRepository getSyncFake(List<Charger> data) {
+        return SyncRepository.buildFake(data);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static IRepository getSyncFail() {
+        return SyncRepository.buildFail();
+    }
 }

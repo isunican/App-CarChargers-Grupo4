@@ -16,6 +16,15 @@ together {
   interface ICallBack
 }
 
+class MainPresenter {
+    -updateChargers(List<Charger> chargers)
+}
+
+class MainView {
+    -onFilterClicked(Chip chip)
+    -onSortingClicked(Chip chip)
+}
+
 interface IMainContract#View {
     init()
     IRepository getRepository()
@@ -27,9 +36,11 @@ interface IMainContract#View {
 }
 
 interface IMainContract#Presenter {
-   init(View view);
+   init(View view)
    onChargerClicked(int index)
-   onMenuInfoClicked();
+   onMenuInfoClicked()
+   onOperatorFilterClicked(EOperator operator, boolean active)
+   onSortingClicked(ESorting criteria)
 }
 
 interface IRepository {

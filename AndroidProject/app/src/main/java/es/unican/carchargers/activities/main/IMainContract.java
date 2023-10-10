@@ -2,6 +2,8 @@ package es.unican.carchargers.activities.main;
 
 import java.util.List;
 
+import es.unican.carchargers.constants.EOperator;
+import es.unican.carchargers.constants.ESorting;
 import es.unican.carchargers.model.Charger;
 import es.unican.carchargers.repository.IRepository;
 
@@ -37,6 +39,18 @@ public interface IMainContract {
          */
         public void onMenuInfoClicked();
 
+        /**
+         * The presenter is informed that a new filtering by operator has been requested
+         * @param operator the operator
+         * @param active true if the operator should be include, false if the operator should be discarded
+         */
+        public void onOperatorFilterClicked(EOperator operator, boolean active);
+
+        /**
+         * The presenter is informed that the user has requested to sort the chargers by the specified criteria
+         * @param criteria
+         */
+        void onSortingClicked(ESorting criteria);
     }
 
     /**
