@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
+import java.util.List;
+
 /**
  * A charging station according to the OpenChargeMap API
  * Documentation: https://openchargemap.org/site/develop/api#/operations/get-poi
@@ -18,10 +20,10 @@ public class Charger {
     @SerializedName("UsageCost")            public String usageCost;
     @SerializedName("OperatorInfo")         public Operator operator;
     @SerializedName("AddressInfo")          public Address address;
+    @SerializedName("Connections")           public List<Connection> connections;
 
     public Charger() {
         this.operator = new Operator();
         this.address = new Address();
     }
-
 }

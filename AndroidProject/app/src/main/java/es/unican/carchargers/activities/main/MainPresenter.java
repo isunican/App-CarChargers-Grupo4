@@ -1,7 +1,11 @@
 package es.unican.carchargers.activities.main;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import es.unican.carchargers.constants.ECountry;
 import es.unican.carchargers.constants.EOperator;
@@ -71,10 +75,50 @@ public class MainPresenter implements IMainContract.Presenter {
         view.showLoadCorrect(this.shownChargers.size());
     }
 
+    private Set<EOperator> activeFilters = new HashSet<>();
+
     @Override
-    public void onOperatorFilterClicked(EOperator operator, boolean active) {
-        // TODO
+    public void onOperatorFilterClicked(EOperator operator, boolean isActive) {
+        if (shownChargers == null) return;
+
+        // Actualizar el conjunto de filtros activos
+        if (isActive) {
+            activeFilters.add(operator);
+        } else {
+            activeFilters.remove(operator);
+        }
+
+        // Aplicar todos los filtros activos
+        applyFilters();
     }
+
+    private void applyFilters() {
+        List<Charger> filteredChargers;
+
+        System.out.println("Cantidad inicial de cargadores: " + shownChargers.size());
+        System.out.println("Filtros activos: " + activeFilters);
+
+        if (activeFilters.isEmpty()) {
+            // Si no hay filtros activos, mostrar todos los cargadores
+            filteredChargers = new ArrayList<>(shownChargers);
+        } else {
+            // Si hay filtros activos, filtrar la lista de cargadores
+            filteredChargers = shownChargers.stream()
+                    .filter(charger -> {
+                        System.out.println("Operador del cargador: " + charger.operator.title);
+                        EOperator operatorEnum = EOperator.fromId(charger.operator.id);
+                        boolean matchesFilter = operatorEnum != null && activeFilters.contains(operatorEnum);
+                        System.out.println("Coincide con el filtro: " + matchesFilter);
+                        return matchesFilter;
+                    })
+                    .collect(Collectors.toList());
+        }
+
+        System.out.println("Cantidad de cargadores después de filtrar: " + filteredChargers.size());
+        // Mostrar los cargadores filtrados (o todos si no hay filtros activos)
+        view.showChargers(filteredChargers);
+    }
+
 
     @Override
     public void onSortingClicked(ESorting criteria) {
