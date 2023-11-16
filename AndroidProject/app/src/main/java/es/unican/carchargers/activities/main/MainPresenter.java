@@ -6,14 +6,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.Comparator;
 
 import es.unican.carchargers.constants.ECountry;
 import es.unican.carchargers.constants.EOperator;
 import es.unican.carchargers.constants.ESorting;
+import es.unican.carchargers.model.Address;
 import es.unican.carchargers.model.Charger;
 import es.unican.carchargers.repository.ICallBack;
 import es.unican.carchargers.repository.IRepository;
 import es.unican.carchargers.repository.service.APIArguments;
+import es.unican.carchargers.model.Connection;
+
 
 public class MainPresenter implements IMainContract.Presenter {
 
@@ -22,6 +26,14 @@ public class MainPresenter implements IMainContract.Presenter {
 
     /** a cached list of charging stations currently shown */
     private List<Charger> shownChargers;
+
+    @Override
+    public void onChargerClicked(int index) {
+        if (shownChargers != null && index < shownChargers.size()) {
+            Charger charger = shownChargers.get(index);
+            view.showChargerDetails(charger);
+        }
+    }
 
     @Override
     public void init(IMainContract.View view) {
@@ -122,17 +134,49 @@ public class MainPresenter implements IMainContract.Presenter {
 
     @Override
     public void onSortingClicked(ESorting criteria) {
-        // TODO
+        if (shownChargers == null || shownChargers.isEmpty()) {
+            System.out.println("La lista de cargadores está vacía o es nula.");
+            return;
+        }
+
+        // Ordenar la lista basándose en el criterio proporcionado.
+        switch (criteria) {
+            case COST:
+                shownChargers.sort(Comparator.comparingDouble(c -> parseCost(c.usageCost)));
+                break;
+            case DISTANCE:
+                shownChargers.sort(Comparator.comparingDouble(c->c.calculateDistanceToSantander()));
+               break;
+            case POWER:
+                shownChargers.sort(Comparator.comparingDouble(c->c.getMaxPower()));
+                break;
+
+            default:
+                // Si el criterio proporcionado no es reconocido, no hacemos nada.
+                return;
+        }
+
+        // Finalmente, mostrar los cargadores ordenados en la vista.
+        view.showChargers(shownChargers);
     }
 
-    @Override
-    public void onChargerClicked(int index) {
-        if (shownChargers != null && index < shownChargers.size()) {
-            Charger charger = shownChargers.get(index);
-            view.showChargerDetails(charger);
+    // Función auxiliar para convertir el String usageCost a Double
+    private Double parseCost(String costString) {
+        try {
+            String[] costs = costString.split("-");
+            String firstCost = costs[0].replaceAll(",", ".");
+            return Double.parseDouble(firstCost.replaceAll("[^0-9.]", ""));
+        } catch (Exception e) {
+            return Double.MAX_VALUE; // Valor alto para que los elementos no válidos se ordenen al final
         }
     }
 
+    private Double getMaxPower(Charger c) {
+        return c.connections.stream()
+                .mapToDouble(Connection::getPower)
+                .max()
+                .orElse(0.0);
+    }
     @Override
     public void onMenuInfoClicked() {
         view.showInfoActivity();
