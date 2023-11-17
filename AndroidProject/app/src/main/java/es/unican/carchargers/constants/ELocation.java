@@ -10,19 +10,9 @@ public enum ELocation {
     public final double lat;
     public final double lon;
 
-
     private ELocation(double lat, double lon) {
         this.lat = lat;
         this.lon = lon;
-    }
-
-    public double getELon()
-    {
-        return lon;
-    }
-    public double getELat()
-    {
-        return lat;
     }
 
 }

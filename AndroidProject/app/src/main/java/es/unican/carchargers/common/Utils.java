@@ -29,14 +29,4 @@ public class Utils {
         return null;
     }
 
-    /**
-     * Calcula la distancia entre dos puntos geográficos.
-     *
-     * @param lat1 Latitud del primer punto
-     * @param lon1 Longitud del primer punto
-     * @param lat2 Latitud del segundo punto
-     * @param lon2 Longitud del segundo punto
-     * @return Distancia en kilómetros
-     */
-
 }
