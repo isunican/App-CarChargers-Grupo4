@@ -122,7 +122,36 @@ public class MainPresenter implements IMainContract.Presenter {
 
     @Override
     public void onSortingClicked(ESorting criteria) {
+<<<<<<< HEAD
         // TODO
+=======
+        if (shownChargers == null || shownChargers.isEmpty()) {
+            System.out.println("La lista de cargadores está vacía o es nula.");
+            return;
+        }
+
+        // Aplicar filtros primero
+        List<Charger> filteredChargers = applyFiltersForSorting();
+
+        // Ordenar la lista basándose en el criterio proporcionado.
+        switch (criteria) {
+            case COST:
+                filteredChargers.sort(Comparator.comparingDouble(c -> parseCost(c.usageCost)));
+                break;
+            case DISTANCE:
+                filteredChargers.sort(Comparator.comparingDouble(c -> c.calculateDistanceToSantander()));
+                break;
+            case POWER:
+                filteredChargers.sort(Comparator.comparingDouble(this::getMaxPower));
+                break;
+            default:
+                // Si el criterio proporcionado no es reconocido, no hacemos nada.
+                return;
+        }
+
+        // Finalmente, mostrar los cargadores ordenados en la vista.
+        view.showChargers(filteredChargers);
+>>>>>>> 67528b854b70a7550eacd71ed6461b978dee6099
     }
 
     @Override
@@ -133,6 +162,28 @@ public class MainPresenter implements IMainContract.Presenter {
         }
     }
 
+<<<<<<< HEAD
+=======
+    private List<Charger> applyFiltersForSorting() {
+        if (activeFilters.isEmpty()) {
+            return new ArrayList<>(shownChargers);
+        } else {
+            return shownChargers.stream()
+                    .filter(charger -> {
+                        EOperator operatorEnum = EOperator.fromId(charger.operator.id);
+                        return operatorEnum != null && activeFilters.contains(operatorEnum);
+                    })
+                    .collect(Collectors.toList());
+        }
+    }
+
+    private Double getMaxPower(Charger c) {
+        return c.connections.stream()
+                .mapToDouble(Connection::getPower)
+                .max()
+                .orElse(0.0);
+    }
+>>>>>>> 67528b854b70a7550eacd71ed6461b978dee6099
     @Override
     public void onMenuInfoClicked() {
         view.showInfoActivity();
