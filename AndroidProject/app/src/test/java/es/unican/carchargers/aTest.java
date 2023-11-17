@@ -51,16 +51,13 @@ public class aTest {
         address.longitude = -3.703790;
         Connection connection = new Connection();
         connection.powerKw = "22";
-        // Crear el primer cargador
         Charger charger1 = new Charger();
         charger1.id = "1";
         charger1.numberOfPoints = 4;
         charger1.usageCost = "Gratis";
         charger1.operator = operator;
         charger1.address = address;
-        // Inicializar la lista de conexiones
         charger1.connections = new ArrayList<>();
-        // Agregar la conexión a la lista
         charger1.connections.add(connection);
 
         chargers.add(charger1);
@@ -73,14 +70,12 @@ public class aTest {
         MockitoAnnotations.initMocks(this);
         presenter = new MainPresenter();
 
-        // Configura el comportamiento del mockRepository
         doAnswer(invocation -> {
             ICallBack callback = invocation.getArgument(1);
             callback.onSuccess(createTestChargers());
             return null;
         }).when(mockRepository).requestChargers(any(APIArguments.class), any(ICallBack.class));
 
-        // Configura el mockView para devolver el mockRepository
         when(mockView.getRepository()).thenReturn(mockRepository);
 
         presenter.init(mockView);
