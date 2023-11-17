@@ -2,6 +2,7 @@ package es.unican.carchargers.activities.main;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,6 +15,7 @@ import es.unican.carchargers.model.Charger;
 import es.unican.carchargers.repository.ICallBack;
 import es.unican.carchargers.repository.IRepository;
 import es.unican.carchargers.repository.service.APIArguments;
+import es.unican.carchargers.model.Connection;
 
 public class MainPresenter implements IMainContract.Presenter {
 
@@ -122,9 +124,6 @@ public class MainPresenter implements IMainContract.Presenter {
 
     @Override
     public void onSortingClicked(ESorting criteria) {
-<<<<<<< HEAD
-        // TODO
-=======
         if (shownChargers == null || shownChargers.isEmpty()) {
             System.out.println("La lista de cargadores está vacía o es nula.");
             return;
@@ -151,7 +150,6 @@ public class MainPresenter implements IMainContract.Presenter {
 
         // Finalmente, mostrar los cargadores ordenados en la vista.
         view.showChargers(filteredChargers);
->>>>>>> 67528b854b70a7550eacd71ed6461b978dee6099
     }
 
     @Override
@@ -162,8 +160,6 @@ public class MainPresenter implements IMainContract.Presenter {
         }
     }
 
-<<<<<<< HEAD
-=======
     private List<Charger> applyFiltersForSorting() {
         if (activeFilters.isEmpty()) {
             return new ArrayList<>(shownChargers);
@@ -177,13 +173,23 @@ public class MainPresenter implements IMainContract.Presenter {
         }
     }
 
+    // Función auxiliar para convertir el String usageCost a Double
+    private Double parseCost(String costString) {
+        try {
+            String[] costs = costString.split("-");
+            String firstCost = costs[0].replaceAll(",", ".");
+            return Double.parseDouble(firstCost.replaceAll("[^0-9.]", ""));
+        } catch (Exception e) {
+            return Double.MAX_VALUE; // Valor alto para que los elementos no válidos se ordenen al final
+        }
+    }
+
     private Double getMaxPower(Charger c) {
         return c.connections.stream()
                 .mapToDouble(Connection::getPower)
                 .max()
                 .orElse(0.0);
     }
->>>>>>> 67528b854b70a7550eacd71ed6461b978dee6099
     @Override
     public void onMenuInfoClicked() {
         view.showInfoActivity();
