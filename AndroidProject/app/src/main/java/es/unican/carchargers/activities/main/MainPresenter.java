@@ -139,25 +139,27 @@ public class MainPresenter implements IMainContract.Presenter {
             return;
         }
 
+        // Aplicar filtros primero
+        List<Charger> filteredChargers = applyFiltersForSorting();
+
         // Ordenar la lista basándose en el criterio proporcionado.
         switch (criteria) {
             case COST:
-                shownChargers.sort(Comparator.comparingDouble(c -> parseCost(c.usageCost)));
+                filteredChargers.sort(Comparator.comparingDouble(c -> parseCost(c.usageCost)));
                 break;
             case DISTANCE:
-                shownChargers.sort(Comparator.comparingDouble(c->c.calculateDistanceToSantander()));
-               break;
-            case POWER:
-                shownChargers.sort(Comparator.comparingDouble(c->c.getMaxPower()));
+                filteredChargers.sort(Comparator.comparingDouble(c -> c.calculateDistanceToSantander()));
                 break;
-
+            case POWER:
+                filteredChargers.sort(Comparator.comparingDouble(this::getMaxPower));
+                break;
             default:
                 // Si el criterio proporcionado no es reconocido, no hacemos nada.
                 return;
         }
 
         // Finalmente, mostrar los cargadores ordenados en la vista.
-        view.showChargers(shownChargers);
+        view.showChargers(filteredChargers);
     }
 
     // Función auxiliar para convertir el String usageCost a Double
@@ -168,6 +170,19 @@ public class MainPresenter implements IMainContract.Presenter {
             return Double.parseDouble(firstCost.replaceAll("[^0-9.]", ""));
         } catch (Exception e) {
             return Double.MAX_VALUE; // Valor alto para que los elementos no válidos se ordenen al final
+        }
+    }
+
+    private List<Charger> applyFiltersForSorting() {
+        if (activeFilters.isEmpty()) {
+            return new ArrayList<>(shownChargers);
+        } else {
+            return shownChargers.stream()
+                    .filter(charger -> {
+                        EOperator operatorEnum = EOperator.fromId(charger.operator.id);
+                        return operatorEnum != null && activeFilters.contains(operatorEnum);
+                    })
+                    .collect(Collectors.toList());
         }
     }
 
