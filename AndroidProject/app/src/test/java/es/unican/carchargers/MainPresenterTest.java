@@ -41,8 +41,8 @@ public class MainPresenterTest {
         address.title = "Dirección de Prueba";
         address.town = "Ciudad de Prueba";
         address.province = "Provincia de Prueba";
-        address.latitude = "40.416775";
-        address.longitude = "-3.703790";
+        address.latitude = 40.416775;
+        address.longitude = -3.703790;
         Connection connection = new Connection();
         connection.powerKw = "22";
         // Crear el primer cargador
