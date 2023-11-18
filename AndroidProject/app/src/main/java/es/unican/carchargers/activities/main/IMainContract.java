@@ -41,10 +41,12 @@ public interface IMainContract {
 
         /**
          * The presenter is informed that a new filtering by operator has been requested
+         *
          * @param operator the operator
-         * @param active true if the operator should be include, false if the operator should be discarded
+         * @param active   true if the operator should be include, false if the operator should be discarded
+         * @return
          */
-        public void onOperatorFilterClicked(EOperator operator, boolean active);
+        public int onOperatorFilterClicked(EOperator operator, boolean active);
 
         /**
          * The presenter is informed that the user has requested to sort the chargers by the specified criteria

@@ -2,6 +2,7 @@ package es.unican.carchargers;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import es.unican.carchargers.activities.main.IMainContract;
 import es.unican.carchargers.activities.main.MainPresenter;
+import es.unican.carchargers.constants.EOperator;
 import es.unican.carchargers.model.Address;
 import es.unican.carchargers.model.Charger;
 import es.unican.carchargers.model.Connection;
@@ -40,7 +42,7 @@ public class aTest {
 
         Operator operator = new Operator();
         operator.id = 1;
-        operator.title = "Operador de Prueba";
+        operator.title = "Zunder";
         operator.website = "http://example.com";
         operator.comments = "Comentarios del operador";
         Address address = new Address();
@@ -101,5 +103,61 @@ public class aTest {
         verify(mockView, times(1)).showChargers(chargers);
         assertEquals("Verificar ID del cargador", "1", chargers.get(0).id);
         assertEquals("Verificar número de puntos", 4, chargers.get(0).numberOfPoints);
+    }
+
+    @Test
+    public void testOperatorFilter() {
+        Charger testCharger = createTestChargers().get(0);
+        List<Charger> chargers = new ArrayList<>();
+        chargers.add(testCharger);
+
+        IRepository mockRepository = mock(IRepository.class);
+        doAnswer(invocation -> {
+            ICallBack callback = invocation.getArgument(1);
+            callback.onSuccess(chargers);
+            return null;
+        }).when(mockRepository).requestChargers(any(APIArguments.class), any(ICallBack.class));
+
+        when(mockView.getRepository()).thenReturn(mockRepository);
+
+        presenter.init(mockView);
+
+        int activeFilterCount = presenter.onOperatorFilterClicked(EOperator.ZUNDER, true);
+        assertEquals("Verificar conteo de filtros activos tras activar ZUNDER", 1, activeFilterCount);
+
+        activeFilterCount = presenter.onOperatorFilterClicked(EOperator.TESLA, true);
+        assertEquals("Verificar conteo de filtros activos tras activar OTRO_OPERADOR", 2, activeFilterCount);
+
+        activeFilterCount = presenter.onOperatorFilterClicked(EOperator.ZUNDER, false);
+        assertEquals("Verificar conteo de filtros activos tras desactivar ZUNDER", 1, activeFilterCount);
+    }
+
+    @Test
+    public void testApplyFilters() {
+        Charger testCharger = createTestChargers().get(0);
+        List<Charger> chargers = new ArrayList<>();
+        chargers.add(testCharger);
+
+        IRepository mockRepository = mock(IRepository.class);
+        doAnswer(invocation -> {
+            ICallBack callback = invocation.getArgument(1);
+            callback.onSuccess(chargers);
+            return null;
+        }).when(mockRepository).requestChargers(any(APIArguments.class), any(ICallBack.class));
+
+        when(mockView.getRepository()).thenReturn(mockRepository);
+
+        presenter.init(mockView);
+
+        presenter.onOperatorFilterClicked(EOperator.ZUNDER, true);
+        verify(mockView).showChargers(argThat(list -> list.size() == 1));
+
+        // 5. Activar otro filtro y verificar los resultados
+        presenter.onOperatorFilterClicked(EOperator.TESLA, true);
+        verify(mockView).showChargers(argThat(list -> list.size() == 1));
+
+        // 6. Desactivar un filtro y verificar los resultados
+        presenter.onOperatorFilterClicked(EOperator.ZUNDER, false);
+        verify(mockView).showChargers(argThat(list -> list.size() == 1));
     }
 }

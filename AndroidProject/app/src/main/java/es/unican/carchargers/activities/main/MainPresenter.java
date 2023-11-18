@@ -19,6 +19,7 @@ import es.unican.carchargers.model.Connection;
 
 public class MainPresenter implements IMainContract.Presenter {
 
+    private int activeFilterCount = 0;
     /** the view controlled by this presenter */
     private IMainContract.View view;
 
@@ -80,18 +81,24 @@ public class MainPresenter implements IMainContract.Presenter {
     private Set<EOperator> activeFilters = new HashSet<>();
 
     @Override
-    public void onOperatorFilterClicked(EOperator operator, boolean isActive) {
-        if (shownChargers == null) return;
+    public int onOperatorFilterClicked(EOperator operator, boolean isActive) {
+        if (shownChargers == null) return activeFilterCount;
 
         // Actualizar el conjunto de filtros activos
         if (isActive) {
-            activeFilters.add(operator);
+            if (activeFilters.add(operator)) {
+                activeFilterCount++;
+            }
         } else {
-            activeFilters.remove(operator);
+            if (activeFilters.remove(operator)) {
+                activeFilterCount--;
+            }
         }
 
         // Aplicar todos los filtros activos
         applyFilters();
+
+        return activeFilterCount;
     }
 
     private void applyFilters() {
