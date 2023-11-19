@@ -96,5 +96,27 @@ public class ShowChargersUITest {
                 .inAdapterView(withId(R.id.lvChargers)).atPosition(0);
         interaction2.onChildView(withId(R.id.tvTitle)).check(matches(withText("Zunder")));
     }
+    @Test
+    public void onSortingClickedTest() {
+        onView(withId(R.id.lvChargers)).check(matches(isNotEmpty()));
 
+        onView(withId(R.id.chipPrecio)).perform(click());
+
+        DataInteraction interaction1 = onData(anything())
+                .inAdapterView(withId(R.id.lvChargers)).atPosition(0);
+        interaction1.onChildView(withId(R.id.tvTitle)).check(matches(withText("Endesa")));
+
+        onView(withId(R.id.chipPotencia)).perform(click());
+
+        DataInteraction interaction2 = onData(anything())
+                .inAdapterView(withId(R.id.lvChargers)).atPosition(0);
+        interaction1.onChildView(withId(R.id.tvTitle)).check(matches(withText("(Business Owner at Location)")));
+
+        onView(withId(R.id.chipDistancia)).perform(click());
+        DataInteraction interaction3 = onData(anything())
+                .inAdapterView(withId(R.id.lvChargers)).atPosition(0);
+        interaction1.onChildView(withId(R.id.tvTitle)).check(matches(withText("Repsol - Ibil (ES)")));
+
+
+    }
 }

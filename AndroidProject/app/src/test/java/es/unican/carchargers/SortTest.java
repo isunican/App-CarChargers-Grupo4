@@ -236,7 +236,7 @@ public class SortTest {
         verify(mockView, times(1)).showChargers(argThat(list -> Math.abs(list.get(2).getMaxPower() - 40) < 0.001));
         verify(mockView, times(1)).showChargers(argThat(list -> Math.abs(list.get(3).getMaxPower() - 50) < 0.001));
 
-        
+
     }
 
 }

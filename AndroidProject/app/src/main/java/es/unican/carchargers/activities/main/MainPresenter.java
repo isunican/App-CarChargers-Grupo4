@@ -157,6 +157,11 @@ public class MainPresenter implements IMainContract.Presenter {
 
         // Finalmente, mostrar los cargadores ordenados en la vista.
         view.showChargers(filteredChargers);
+        System.out.println("1: "+filteredChargers.get(0).id);
+        System.out.println("2: "+filteredChargers.get(1).id);
+        System.out.println("3: "+filteredChargers.get(2).id);
+
+
     }
 
     @Override
