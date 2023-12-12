@@ -116,7 +116,5 @@ public class ShowChargersUITest {
         DataInteraction interaction3 = onData(anything())
                 .inAdapterView(withId(R.id.lvChargers)).atPosition(0);
         interaction1.onChildView(withId(R.id.tvTitle)).check(matches(withText("Repsol - Ibil (ES)")));
-
-
     }
 }
