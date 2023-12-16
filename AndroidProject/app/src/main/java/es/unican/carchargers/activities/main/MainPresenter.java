@@ -78,13 +78,11 @@ public class MainPresenter implements IMainContract.Presenter {
         view.showLoadCorrect(this.shownChargers.size());
     }
 
-    private Set<EOperator> activeFilters = new HashSet<>();
+    public static Set<EOperator> activeFilters = new HashSet<>();
 
     @Override
-    public int onOperatorFilterClicked(EOperator operator, boolean isActive) {
-        if (shownChargers == null) return activeFilterCount;
-
-        // Actualizar el conjunto de filtros activos
+    public void onOperatorFilterClicked(EOperator operator, boolean isActive) {
+        if (shownChargers == null) {}
         if (isActive) {
             if (activeFilters.add(operator)) {
                 activeFilterCount++;
@@ -94,37 +92,22 @@ public class MainPresenter implements IMainContract.Presenter {
                 activeFilterCount--;
             }
         }
-
-        // Aplicar todos los filtros activos
         applyFilters();
-
-        return activeFilterCount;
     }
 
-    private void applyFilters() {
+    public void applyFilters() {
         List<Charger> filteredChargers;
-
-        System.out.println("Cantidad inicial de cargadores: " + shownChargers.size());
-        System.out.println("Filtros activos: " + activeFilters);
-
         if (activeFilters.isEmpty()) {
-            // Si no hay filtros activos, mostrar todos los cargadores
             filteredChargers = new ArrayList<>(shownChargers);
         } else {
-            // Si hay filtros activos, filtrar la lista de cargadores
             filteredChargers = shownChargers.stream()
                     .filter(charger -> {
-                        System.out.println("Operador del cargador: " + charger.operator.title);
                         EOperator operatorEnum = EOperator.fromId(charger.operator.id);
                         boolean matchesFilter = operatorEnum != null && activeFilters.contains(operatorEnum);
-                        System.out.println("Coincide con el filtro: " + matchesFilter);
                         return matchesFilter;
                     })
                     .collect(Collectors.toList());
         }
-
-        System.out.println("Cantidad de cargadores después de filtrar: " + filteredChargers.size());
-        // Mostrar los cargadores filtrados (o todos si no hay filtros activos)
         view.showChargers(filteredChargers);
     }
 
@@ -160,8 +143,6 @@ public class MainPresenter implements IMainContract.Presenter {
         System.out.println("1: "+filteredChargers.get(0).id);
         System.out.println("2: "+filteredChargers.get(1).id);
         System.out.println("3: "+filteredChargers.get(2).id);
-
-
     }
 
     @Override
