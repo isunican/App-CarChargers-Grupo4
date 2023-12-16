@@ -6,6 +6,8 @@ import org.mockito.Mockito;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
+import static es.unican.carchargers.activities.main.MainPresenter.activeFilters;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +53,14 @@ public class FilterTest extends TestBase {
         chargers.add(testCharger3);
         Charger testCharger4 = TestUtils.createTestChargers().get(3);
         chargers.add(testCharger4);
+        Charger testCharger5 = TestUtils.createTestChargers().get(4);
+        chargers.add(testCharger5);
+        Charger testCharger6 = TestUtils.createTestChargers().get(5);
+        chargers.add(testCharger6);
+        Charger testCharger7 = TestUtils.createTestChargers().get(6);
+        chargers.add(testCharger7);
+        Charger testCharger8 = TestUtils.createTestChargers().get(7);
+        chargers.add(testCharger8);
 
         IRepository mockRepository = mock(IRepository.class);
         doAnswer(invocation -> {
@@ -63,22 +73,33 @@ public class FilterTest extends TestBase {
 
         presenter.init(mockView);
 
-        int activeFilterCount = presenter.onOperatorFilterClicked(EOperator.ZUNDER, true);
-        assertEquals("Verificar conteo de filtros activos tras activar ZUNDER", 1, activeFilterCount);
+        presenter.onOperatorFilterClicked(EOperator.ZUNDER, true);
+        assertEquals(1, activeFilters.size());
+        reset(mockView);
 
-        activeFilterCount = presenter.onOperatorFilterClicked(EOperator.TESLA, true);
-        assertEquals("Verificar conteo de filtros activos tras activar OTRO_OPERADOR", 2, activeFilterCount);
+        presenter.onOperatorFilterClicked(EOperator.IBERDROLA, true);
+        assertEquals(2, activeFilters.size());
+        reset(mockView);
 
-        activeFilterCount = presenter.onOperatorFilterClicked(EOperator.ZUNDER, false);
-        assertEquals("Verificar conteo de filtros activos tras desactivar ZUNDER", 1, activeFilterCount);
+        presenter.onOperatorFilterClicked(EOperator.IONITY, true);
+        assertEquals(3, activeFilters.size());
+        reset(mockView);
+
+        presenter.onOperatorFilterClicked(EOperator.TESLA, true);
+        assertEquals(4, activeFilters.size());
+        reset(mockView);
+
+        presenter.onOperatorFilterClicked(EOperator.TESLA, false);
+        presenter.onOperatorFilterClicked(EOperator.IONITY, false);
+        presenter.onOperatorFilterClicked(EOperator.ZUNDER, false);
+        presenter.onOperatorFilterClicked(EOperator.IBERDROLA, false);
+        assertEquals(0, activeFilters.size());
     }
 
     @Test
     public void testApplyFilters() {
-        // Preparar la lista de cargadores
         List<Charger> chargers = TestUtils.createTestChargers();
 
-        // Configurar el mock del repositorio
         IRepository mockRepository = mock(IRepository.class);
         doAnswer(invocation -> {
             ICallBack callback = invocation.getArgument(1);
@@ -88,40 +109,38 @@ public class FilterTest extends TestBase {
 
         when(mockView.getRepository()).thenReturn(mockRepository);
 
-        // Inicializar el presentador
         presenter.init(mockView);
 
-        // Configuración de los filtros y verificación de los resultados usando applyFilters()
-        // Suponiendo que 'activeFilters' es accesible y modificable desde aquí
-        // Si no es así, necesitarías exponer alguna funcionalidad para manipular los filtros activos
 
-        // Activar filtro para ZUNDER
-        presenter.activeFilters.add(EOperator.ZUNDER);
-        presenter.applyFilters();
-        verify(mockView, times(1)).showChargers(argThat(list -> list.size() == 1));
-        reset(mockView);
-
-        // Activar filtro para TESLA
-        presenter.activeFilters.add(EOperator.TESLA);
+        activeFilters.add(EOperator.ZUNDER);
         presenter.applyFilters();
         verify(mockView, times(1)).showChargers(argThat(list -> list.size() == 2));
         reset(mockView);
 
-        // Activar filtro para IBERDROLA
-        presenter.activeFilters.add(EOperator.IBERDROLA);
-        presenter.applyFilters();
-        verify(mockView, times(1)).showChargers(argThat(list -> list.size() == 3));
-        reset(mockView);
-        // Activar filtro para IONITY
-        presenter.activeFilters.add(EOperator.IONITY);
+        activeFilters.add(EOperator.TESLA);
         presenter.applyFilters();
         verify(mockView, times(1)).showChargers(argThat(list -> list.size() == 4));
         reset(mockView);
 
-        // Desactivar filtro para IONITY
-        presenter.activeFilters.remove(EOperator.IONITY);
+        activeFilters.add(EOperator.IBERDROLA);
         presenter.applyFilters();
-        verify(mockView, times(1)).showChargers(argThat(list -> list.size() == 3));
+        verify(mockView, times(1)).showChargers(argThat(list -> list.size() == 6));
         reset(mockView);
+
+        activeFilters.add(EOperator.IONITY);
+        presenter.applyFilters();
+        verify(mockView, times(1)).showChargers(argThat(list -> list.size() == 8));
+        reset(mockView);
+
+        activeFilters.remove(EOperator.IONITY);
+        presenter.applyFilters();
+        verify(mockView, times(1)).showChargers(argThat(list -> list.size() == 6));
+        reset(mockView);
+
+        activeFilters.remove(EOperator.IBERDROLA);
+        activeFilters.remove(EOperator.TESLA);
+        activeFilters.remove(EOperator.ZUNDER);
+        presenter.applyFilters();
+        verify(mockView, times(1)).showChargers(argThat(list -> list.size() == 8));
     }
 }

@@ -81,8 +81,8 @@ public class MainPresenter implements IMainContract.Presenter {
     public static Set<EOperator> activeFilters = new HashSet<>();
 
     @Override
-    public int onOperatorFilterClicked(EOperator operator, boolean isActive) {
-        if (shownChargers == null) return activeFilterCount;
+    public void onOperatorFilterClicked(EOperator operator, boolean isActive) {
+        if (shownChargers == null) {}
         if (isActive) {
             if (activeFilters.add(operator)) {
                 activeFilterCount++;
@@ -93,8 +93,6 @@ public class MainPresenter implements IMainContract.Presenter {
             }
         }
         applyFilters();
-
-        return activeFilterCount;
     }
 
     public void applyFilters() {

@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -203,14 +204,19 @@ public class FilterTest {
 
         presenter.init(mockView);
 
-        int activeFilterCount = presenter.onOperatorFilterClicked(EOperator.ZUNDER, true);
-        assertEquals("Verificar conteo de filtros activos tras activar ZUNDER", 1, activeFilterCount);
+        presenter.onOperatorFilterClicked(EOperator.ZUNDER, true);
+        verify(mockView, times(1)).showChargers(argThat(list -> list.size() == 1));
+        reset(mockView);
+        //assertEquals("Verificar conteo de filtros activos tras activar ZUNDER", 1, activeFilterCount);
 
-        activeFilterCount = presenter.onOperatorFilterClicked(EOperator.TESLA, true);
-        assertEquals("Verificar conteo de filtros activos tras activar OTRO_OPERADOR", 2, activeFilterCount);
+        presenter.onOperatorFilterClicked(EOperator.TESLA, true);
+        verify(mockView, times(1)).showChargers(argThat(list -> list.size() == 2));
+        reset(mockView);
+        //assertEquals("Verificar conteo de filtros activos tras activar OTRO_OPERADOR", 2, activeFilterCount);
 
-        activeFilterCount = presenter.onOperatorFilterClicked(EOperator.ZUNDER, false);
-        assertEquals("Verificar conteo de filtros activos tras desactivar ZUNDER", 1, activeFilterCount);
+        presenter.onOperatorFilterClicked(EOperator.ZUNDER, false);
+        verify(mockView, times(1)).showChargers(argThat(list -> list.size() == 1));
+        //assertEquals("Verificar conteo de filtros activos tras desactivar ZUNDER", 1, activeFilterCount);
     }
 
     @Test
