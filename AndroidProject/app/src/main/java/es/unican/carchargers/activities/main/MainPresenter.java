@@ -148,7 +148,7 @@ public class MainPresenter implements IMainContract.Presenter {
                 filteredChargers.sort(Comparator.comparingDouble(c -> c.calculateDistanceToSantander()));
                 break;
             case POWER:
-                filteredChargers.sort(Comparator.comparingDouble(this::getMaxPower));
+                filteredChargers.sort(Comparator.comparingDouble(Charger::getMaxPower));
                 break;
             default:
                 // Si el criterio proporcionado no es reconocido, no hacemos nada.
@@ -194,13 +194,6 @@ public class MainPresenter implements IMainContract.Presenter {
         } catch (Exception e) {
             return Double.MAX_VALUE; // Valor alto para que los elementos no válidos se ordenen al final
         }
-    }
-
-    private Double getMaxPower(Charger c) {
-        return c.connections.stream()
-                .mapToDouble(Connection::getPower)
-                .max()
-                .orElse(0.0);
     }
     @Override
     public void onMenuInfoClicked() {

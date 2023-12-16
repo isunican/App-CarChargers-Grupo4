@@ -1,6 +1,5 @@
 package es.unican.carchargers.sampledata;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +24,12 @@ public class TestUtils {
         address1.province = "Provincia de Prueba";
         address1.latitude = 40.416775;
         address1.longitude = -3.703790;
-        Connection connection1 = new Connection();
-        connection1.powerKw = "22";
+        Connection connection1a = new Connection();
+        connection1a.powerKw = "10";
+        Connection connection1b = new Connection();
+        connection1b.powerKw = "11";
+        Connection connection1c = new Connection();
+        connection1c.powerKw = "12";
         Charger charger1 = new Charger();
         charger1.id = "1";
         charger1.numberOfPoints = 4;
@@ -34,7 +37,9 @@ public class TestUtils {
         charger1.operator = operator1;
         charger1.address = address1;
         charger1.connections = new ArrayList<>();
-        charger1.connections.add(connection1);
+        charger1.connections.add(connection1a);
+        charger1.connections.add(connection1b);
+        charger1.connections.add(connection1c);
 
         chargers.add(charger1);
 
@@ -49,8 +54,12 @@ public class TestUtils {
         address2.province = "Provincia de Prueba";
         address2.latitude = 40.416775;
         address2.longitude = -3.703790;
-        Connection connection2 = new Connection();
-        connection2.powerKw = "22";
+        Connection connection2a = new Connection();
+        connection2a.powerKw = "20";
+        Connection connection2b = new Connection();
+        connection2b.powerKw = "21";
+        Connection connection2c = new Connection();
+        connection2c.powerKw = "22";
         Charger charger2 = new Charger();
         charger2.id = "1";
         charger2.numberOfPoints = 4;
@@ -58,7 +67,9 @@ public class TestUtils {
         charger2.operator = operator2;
         charger2.address = address2;
         charger2.connections = new ArrayList<>();
-        charger2.connections.add(connection2);
+        charger2.connections.add(connection2a);
+        charger2.connections.add(connection2b);
+        charger2.connections.add(connection2c);
 
         chargers.add(charger2);
 
@@ -73,8 +84,12 @@ public class TestUtils {
         address3.province = "Provincia de Prueba";
         address3.latitude = 40.416775;
         address3.longitude = -3.703790;
-        Connection connection3 = new Connection();
-        connection3.powerKw = "22";
+        Connection connection3a = new Connection();
+        connection3a.powerKw = "30";
+        Connection connection3b = new Connection();
+        connection3b.powerKw = "31";
+        Connection connection3c = new Connection();
+        connection3c.powerKw = "32";
         Charger charger3 = new Charger();
         charger3.id = "1";
         charger3.numberOfPoints = 4;
@@ -82,8 +97,9 @@ public class TestUtils {
         charger3.operator = operator3;
         charger3.address = address3;
         charger3.connections = new ArrayList<>();
-        charger3.connections.add(connection3);
-
+        charger3.connections.add(connection3a);
+        charger3.connections.add(connection3b);
+        charger3.connections.add(connection3c);
         chargers.add(charger3);
 
         Operator operator4 = new Operator();
@@ -97,16 +113,22 @@ public class TestUtils {
         address4.province = "Provincia de Prueba";
         address4.latitude = 40.416775;
         address4.longitude = -3.703790;
-        Connection connection4 = new Connection();
-        connection4.powerKw = "22";
+        Connection connection4a = new Connection();
+        connection4a.powerKw = "40";
         Charger charger4 = new Charger();
+        Connection connection4b = new Connection();
+        connection4b.powerKw = "41";
+        Connection connection4c = new Connection();
+        connection4c.powerKw = "42";
         charger4.id = "1";
         charger4.numberOfPoints = 4;
         charger4.usageCost = "Gratis";
         charger4.operator = operator4;
         charger4.address = address4;
         charger4.connections = new ArrayList<>();
-        charger4.connections.add(connection4);
+        charger4.connections.add(connection4a);
+        charger4.connections.add(connection4b);
+        charger4.connections.add(connection4c);
 
         chargers.add(charger4);
 
