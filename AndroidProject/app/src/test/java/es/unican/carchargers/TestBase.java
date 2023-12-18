@@ -1,4 +1,4 @@
-package es.unican.carchargers.sampledata;
+package es.unican.carchargers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -28,7 +28,7 @@ public abstract class TestBase {
 
         doAnswer(invocation -> {
             ICallBack callback = invocation.getArgument(1);
-            callback.onSuccess(TestUtils.createTestChargers());
+            //callback.onSuccess(TestUtils.createTestChargers());
             return null;
         }).when(mockRepository).requestChargers(any(APIArguments.class), any(ICallBack.class));
 
