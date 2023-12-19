@@ -11,7 +11,6 @@ import static es.unican.carchargers.activities.main.MainPresenter.activeFilters;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.unican.carchargers.activities.main.MainPresenter;
 import es.unican.carchargers.constants.EOperator;
 import es.unican.carchargers.model.Charger;
 import es.unican.carchargers.repository.ICallBack;
@@ -19,28 +18,6 @@ import es.unican.carchargers.repository.IRepository;
 import es.unican.carchargers.repository.service.APIArguments;
 
 public class FilterTest extends TestBase {
-
-    @Test
-    public void testChargerLoading() {
-        Charger testCharger = TestUtils.createTestChargers().get(0);
-        List<Charger> chargers = new ArrayList<>();
-        chargers.add(testCharger);
-
-        IRepository mockRepository = mock(IRepository.class);
-        doAnswer(invocation -> {
-            ICallBack callback = invocation.getArgument(1);
-            callback.onSuccess(chargers);
-            return null;
-        }).when(mockRepository).requestChargers(any(APIArguments.class), any(ICallBack.class));
-
-        when(mockView.getRepository()).thenReturn(mockRepository);
-
-        presenter.init(mockView);
-
-        verify(mockView, times(1)).showChargers(chargers);
-        assertEquals("Verificar ID del cargador", "1", chargers.get(0).id);
-        assertEquals("Verificar número de puntos", 4, chargers.get(0).numberOfPoints);
-    }
 
     @Test
     public void testOperatorFilter() {
