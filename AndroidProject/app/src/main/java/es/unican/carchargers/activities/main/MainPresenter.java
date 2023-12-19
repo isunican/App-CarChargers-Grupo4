@@ -131,18 +131,15 @@ public class MainPresenter implements IMainContract.Presenter {
                 filteredChargers.sort(Comparator.comparingDouble(c -> c.calculateDistanceToSantander()));
                 break;
             case POWER:
-                filteredChargers.sort(Comparator.comparingDouble(this::getMaxPower));
+                filteredChargers.sort(Comparator.comparingDouble(Charger::getMaxPower));
                 break;
-            default:
-                // Si el criterio proporcionado no es reconocido, no hacemos nada.
-                return;
         }
 
         // Finalmente, mostrar los cargadores ordenados en la vista.
         view.showChargers(filteredChargers);
-        System.out.println("1: "+filteredChargers.get(0).id);
-        System.out.println("2: "+filteredChargers.get(1).id);
-        System.out.println("3: "+filteredChargers.get(2).id);
+//        System.out.println("1: "+filteredChargers.get(0).id);
+//        System.out.println("2: "+filteredChargers.get(1).id);
+//        System.out.println("3: "+filteredChargers.get(2).id);
     }
 
     @Override
@@ -175,13 +172,6 @@ public class MainPresenter implements IMainContract.Presenter {
         } catch (Exception e) {
             return Double.MAX_VALUE; // Valor alto para que los elementos no válidos se ordenen al final
         }
-    }
-
-    private Double getMaxPower(Charger c) {
-        return c.connections.stream()
-                .mapToDouble(Connection::getPower)
-                .max()
-                .orElse(0.0);
     }
     @Override
     public void onMenuInfoClicked() {

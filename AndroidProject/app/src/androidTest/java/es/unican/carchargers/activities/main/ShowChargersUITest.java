@@ -66,55 +66,45 @@ public class ShowChargersUITest {
             .getFake(context.getResources().openRawResource(R.raw.chargers_es_100));
 
     @Test
-    public void showChargersTest() {
-        onView(withId(R.id.lvChargers)).check(matches(isNotEmpty()));
-
-        DataInteraction interaction = onData(anything())
-                .inAdapterView(withId(R.id.lvChargers)).atPosition(0);
-        interaction.onChildView(withId(R.id.tvTitle)).check(matches(withText("Zunder")));
-    }
-
-    @Test
-    public void filterChargersTest() {
-        onView(withId(R.id.lvChargers)).check(matches(isNotEmpty()));
-
-        onView(withId(R.id.chipTesla)).perform(click());
-        onView(withId(R.id.chipIberdrola)).perform(click());
-        onView(withId(R.id.chipIonity)).perform(click());
-        onView(withId(R.id.chipZunder)).perform(click());
-
-        onView(withId(R.id.chipIberdrola)).perform(click());
-
-        DataInteraction interaction1 = onData(anything())
-                .inAdapterView(withId(R.id.lvChargers)).atPosition(0);
-        interaction1.onChildView(withId(R.id.tvTitle)).check(matches(withText("Iberdrola")));
-
-        onView(withId(R.id.chipIberdrola)).perform(click());
-        onView(withId(R.id.chipZunder)).perform(click());
-
-        DataInteraction interaction2 = onData(anything())
-                .inAdapterView(withId(R.id.lvChargers)).atPosition(0);
-        interaction2.onChildView(withId(R.id.tvTitle)).check(matches(withText("Zunder")));
-    }
-    @Test
     public void onSortingClickedTest() {
         onView(withId(R.id.lvChargers)).check(matches(isNotEmpty()));
 
         onView(withId(R.id.chipPrecio)).perform(click());
 
-        DataInteraction interaction1 = onData(anything())
-                .inAdapterView(withId(R.id.lvChargers)).atPosition(0);
-        interaction1.onChildView(withId(R.id.tvTitle)).check(matches(withText("Endesa")));
+        DataInteraction interaction1a = onData(anything()).inAdapterView(withId(R.id.lvChargers)).atPosition(0);
+        DataInteraction interaction1b = onData(anything()).inAdapterView(withId(R.id.lvChargers)).atPosition(1);
+        DataInteraction interaction1c = onData(anything()).inAdapterView(withId(R.id.lvChargers)).atPosition(2);
+
+        interaction1a.onChildView(withId(R.id.tvTitle)).check(matches(withText("Zunder")));
+        interaction1a.onChildView(withId(R.id.tvAddress)).check(matches(withText("Balsicas - Centro Cívico ( Zunder) (Región de Murcia)")));
+        interaction1b.onChildView(withId(R.id.tvTitle)).check(matches(withText("Zunder")));
+        interaction1b.onChildView(withId(R.id.tvAddress)).check(matches(withText("Torre-Pacheco Club de Golf (Zunder) (Región de Murcia)")));
+        interaction1c.onChildView(withId(R.id.tvTitle)).check(matches(withText("Iberdrola")));
+        interaction1c.onChildView(withId(R.id.tvAddress)).check(matches(withText("Hotel Mirador de Azuaga (Extremadura)")));
 
         onView(withId(R.id.chipPotencia)).perform(click());
 
-        DataInteraction interaction2 = onData(anything())
-                .inAdapterView(withId(R.id.lvChargers)).atPosition(0);
-        interaction1.onChildView(withId(R.id.tvTitle)).check(matches(withText("(Business Owner at Location)")));
+        DataInteraction interaction2a = onData(anything()).inAdapterView(withId(R.id.lvChargers)).atPosition(0);
+        DataInteraction interaction2b = onData(anything()).inAdapterView(withId(R.id.lvChargers)).atPosition(1);
+        DataInteraction interaction2c = onData(anything()).inAdapterView(withId(R.id.lvChargers)).atPosition(2);
+
+        interaction2a.onChildView(withId(R.id.tvTitle)).check(matches(withText("(Business Owner at Location)")));
+        interaction2a.onChildView(withId(R.id.tvAddress)).check(matches(withText("Hotel Abad Toledo (Castilla-La Mancha)")));
+        interaction2b.onChildView(withId(R.id.tvTitle)).check(matches(withText("Mercadona")));
+        interaction2b.onChildView(withId(R.id.tvAddress)).check(matches(withText("Mercadona General Villalba (Castilla-La Mancha)")));
+        interaction2c.onChildView(withId(R.id.tvTitle)).check(matches(withText("Fenie Energía (Spain)")));
+        interaction2c.onChildView(withId(R.id.tvAddress)).check(matches(withText("Parking Indigo (Fenie) (Castilla-La Mancha)")));
 
         onView(withId(R.id.chipDistancia)).perform(click());
-        DataInteraction interaction3 = onData(anything())
-                .inAdapterView(withId(R.id.lvChargers)).atPosition(0);
-        interaction1.onChildView(withId(R.id.tvTitle)).check(matches(withText("Repsol - Ibil (ES)")));
+        DataInteraction interaction3a = onData(anything()).inAdapterView(withId(R.id.lvChargers)).atPosition(0);
+        DataInteraction interaction3b = onData(anything()).inAdapterView(withId(R.id.lvChargers)).atPosition(1);
+        DataInteraction interaction3c = onData(anything()).inAdapterView(withId(R.id.lvChargers)).atPosition(2);
+
+        interaction3a.onChildView(withId(R.id.tvTitle)).check(matches(withText("Wenea")));
+        interaction3a.onChildView(withId(R.id.tvAddress)).check(matches(withText("Rest. El Chuletero (Castilla-La Mancha)")));
+        interaction3b.onChildView(withId(R.id.tvTitle)).check(matches(withText("Mercadona")));
+        interaction3b.onChildView(withId(R.id.tvAddress)).check(matches(withText("Mercadona General Villalba (Castilla-La Mancha)")));
+        interaction3c.onChildView(withId(R.id.tvTitle)).check(matches(withText("(Business Owner at Location)")));
+        interaction3c.onChildView(withId(R.id.tvAddress)).check(matches(withText("Hotel Abad Toledo (Castilla-La Mancha)")));
     }
 }

@@ -7,6 +7,12 @@ import org.parceler.Parcel;
 @Parcel
 public class Connection {
     @SerializedName("PowerKW")            public String powerKw;
+    public Connection(String powerKw) {
+        this.powerKw = powerKw;
+    }
+    public Connection() {
+    }
+
     public double getPower() {
         if (this.powerKw != null && !this.powerKw.isEmpty()) {
             return Double.parseDouble(this.powerKw.trim());
